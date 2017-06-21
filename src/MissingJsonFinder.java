@@ -18,26 +18,66 @@ public class MissingJsonFinder {
             }
         }
 
+        System.out.println("************** Missing/Duplicate Json Entries ***************");
         for (String name : results) {
-            search("\"doc_reference\": \"" + name + "\"");
+            search("\"file_name\": \"" + name + "\"");
         }
+        System.out.println("************** Missing Attachments ***************");
+        searchFile(results);
+
+    }
+
+    private static void searchFile(List<String> results) {
+        // System.out.println(results);
+        String filePath =
+            "/Users/vamshin/code0.9/email-content-config/product/config/document-list-accountopening-version2.json";
+        BufferedReader br;
+        String line = "";
+        try {
+            br = new BufferedReader(new FileReader(filePath));
+            try {
+                while ((line = br.readLine()) != null) {
+
+                    if (line.contains("file_name")) {
+                        line = line.replace("\"file_name\": \"", "");
+                        line = line.replace(".pdf\",", ".pdf");
+                        // System.out.println(line+""+results.contains(line.trim()));
+                        if (!results.contains(line.trim()))
+                            System.out.println(line.trim());
+                        // break;
+
+                    }
+
+                }
+                br.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // System.out.println(results);
 
     }
 
     public static void search(String inputSearch) {
         double count = 0;
         String filePath =
-            "/Users/vamshin/code0.9/email-content-config/product/config/document-list-accountopening-version1.json";
+            "/Users/vamshin/code0.9/email-content-config/product/config/document-list-accountopening-version2.json";
         BufferedReader br;
 
         String line = "";
+        String datedFile = inputSearch.replace(".pdf\"", "_");
+        // System.out.println(inputSearch+" or "+datedFile);
 
         try {
             br = new BufferedReader(new FileReader(filePath));
             try {
                 while ((line = br.readLine()) != null) {
 
-                    if (line.contains(inputSearch)) {
+                    if (line.contains(inputSearch) || line.contains(datedFile)) {
                         count++;
 
                     }
