@@ -17,6 +17,7 @@ public class MissingJsonFinder {
                 results.add(file.getName());
             }
         }
+        results.remove(".DS_Store");
 
         System.out.println("************** Missing/Duplicate Json Entries ***************");
         for (String name : results) {
